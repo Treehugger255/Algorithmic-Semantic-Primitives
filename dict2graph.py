@@ -1,6 +1,5 @@
 import json
 from tqdm import tqdm
-import rustworkx as rx
 
 from stop_words import get_stop_words, StopWordError
 import os
@@ -134,18 +133,14 @@ class Dict2Graph:
 
 
 
-        #encoding_dict = self.get_encoding_dict()
-        #vertex_connections = {}
-
-        # Initialize graph with vertices for each word
-        graph = rx.PyDiGraph()
-        graph.add_nodes_from(self.word_dictionary.keys())
+        encoding_dict = self.get_encoding_dict()
+        vertex_connections = {}
 
         # create edges
-        for index in tqdm(graph.node_indices()):
+        for word in tqdm(self.word_dictionary):
             edges = list(self.get_from_word_edges(word=word))
-            #encoded_edges = [encoding_dict[x] for x in edges if x in encoding_dict]
-            #vertex_connections[encoding_dict[word.lower()]] = encoded_edges
+            encoded_edges = [encoding_dict[x] for x in edges if x in encoding_dict]
+            vertex_connections[encoding_dict[word.lower()]] = encoded_edges
 
         return {"encoding_dict": encoding_dict, "graph": vertex_connections}
 

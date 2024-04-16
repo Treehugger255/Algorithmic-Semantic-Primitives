@@ -1,5 +1,4 @@
-#from graph_utils import DirectedGraph
-import rustworkx as rx
+from graph_utils import DirectedGraph
 from typing import Dict, List, Union, Tuple
 import random, json, os
 from tqdm import tqdm
@@ -10,15 +9,14 @@ class PrimitivesCandidatesGenerator:
     """
     Class for Permutation-based Generation of List of Semantic Primitives
     """
-    def __init__(self, full_graph: Dict[int, List], num_vertices: int, reduced_graph : Dict[int, List]) -> None:
+    def __init__(self, graph: Dict[int, List], num_vertices: int) -> None:
         """
-        :param full_graph: dict, edges dict: {vertex: [destination_vertex, destination_vertex, ...]}
+        :param graph: dict, edges dict: {vertex: [destination_vertex, destination_vertex, ...]}
         :param num_vertices: int, number of vertices in graph
         """
 
-        self.full_graph = full_graph
+        self.graph = graph
         self.num_v = num_vertices
-        self.reduced_graph = reduced_graph
 
     def _randomize_order(self, seq: Union[List, Tuple]) -> Union[List, Tuple]:
         """Outplace order randomization"""
@@ -37,17 +35,15 @@ class PrimitivesCandidatesGenerator:
 
         # randomize order of adding vertexes
         randomized_q = self._randomize_order(
-            seq=list(self.reduced_graph.keys())
+            seq=list(self.graph.keys())
         )
 
         # create graph
-        current_graph = PyDiGraph()
+        current_graph = DirectedGraph(self.num_v)
 
         # adding vertex to graph
         for v in randomized_q:
-            for dest in self.reduced_graph[v]:
-                if dest not in current_graph.V:
-                    current_graph.add_vertex()
+            for dest in self.graph[v]:
                 current_graph.add_edge(v, dest)
 
             # check if vertex can be considered SP candidate
@@ -76,7 +72,7 @@ def save_SP_lists(args):
     num_vertices = get_num_vertices(os.path.join(args.load_dir, "encoding_dict.json"))
 
     sp_generator = PrimitivesCandidatesGenerator(
-        full_graph=graph,
+        graph=graph,
         num_vertices=num_vertices
     )
 
