@@ -1,4 +1,5 @@
-from graph_utils import DirectedGraph
+#from graph_utils import DirectedGraph
+import rustworkx as rx
 from typing import Dict, List, Union, Tuple
 import random, json, os
 from tqdm import tqdm
@@ -40,7 +41,7 @@ class PrimitivesCandidatesGenerator:
         )
 
         # create graph
-        current_graph = DirectedGraph(self.num_v)
+        current_graph = PyDiGraph()
 
         # adding vertex to graph
         for v in randomized_q:

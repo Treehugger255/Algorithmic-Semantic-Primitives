@@ -2,7 +2,6 @@ import os
 import json
 import random
 
-#
 with open("dictionaries\\russian_dictionary.json", "r", encoding="utf-8") as f:
     dic: dict = json.load(f)
 
