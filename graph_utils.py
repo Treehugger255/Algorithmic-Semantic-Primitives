@@ -101,8 +101,6 @@ class DirectedGraph:
         """
         self.graph = defaultdict(list)
 
-    def add_vertext(self, ):
-
 
 def load_graph_dict(json_graph_path: str) -> Dict[int,List[int]]:
     """
