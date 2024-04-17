@@ -187,9 +187,13 @@ class Dict2Graph:
                     visited_depth[neighbor] = depth + 1
                     queue.append((neighbor, depth + 1))
 
-        # Encode this graph into the correct encoding
-        for word in raw_vertex_connections.keys():
-            encoded_edges = [encoding_dict[x] for x in raw_vertex_connections[word] if x in encoding_dict]
+        # Encode all visited vertices into graph with desired edges
+        for word in visited_depth.keys():
+            encoded_edges = []
+
+            # As long as the neighbors were calculated, then add them
+            if word in raw_vertex_connections.keys():
+                encoded_edges = [encoding_dict[x] for x in raw_vertex_connections[word] if x in encoding_dict]
             index = encoding_dict[word.lower()]
             vertex_connections[index] = encoded_edges
         return {"encoding_dict": encoding_dict, "graph": vertex_connections}
