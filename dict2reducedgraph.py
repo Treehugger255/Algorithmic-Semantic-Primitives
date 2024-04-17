@@ -145,43 +145,47 @@ class Dict2Graph:
         raw_vertex_connections = {}
 
         # create edges
-        visited = set()
         roots = set()
-        visited_depth = {}
+        visited_depth = {} # this will serve both as a set of visited vertices and keeping track of the depth
         remaining_words = set(self.word_dictionary.keys())
 
-        while len(visited) < self.size:
+        while len(visited_depth.keys()) < self.size:
             # Choose a new root to start DFS from
             # NOTE: Can be a word that was already explored at an earlier depth, seems reasonable to do
             root = random.choice(list(remaining_words - roots))
             roots.add(root)
-            visited.add(root)
             visited_depth[root] = 0
 
             # Initialize queue
             queue = collections.deque([(root,0)])
 
             # Limited BFS
-            while queue and len(visited) < self.size:
+            while queue and len(visited_depth.keys()) < self.size:
                 # Dequeuing a vertex from queue
                 word, depth = queue[0]
                 queue.popleft()
-
+                bool new = True
                 # If it's already at max depth, don't add any edges or any neighbors
                 if depth >= self.depth:
                     continue
 
-                # Otherwise, explore neighbors
-                edges = list(self.get_from_word_edges(word=word))
-                raw_vertex_connections[word] = edges
+                # If not explored previously at any depth, then compute its neighbors
+                if word not in raw_vertex_connections:
 
-                # If not visited, mark it as visited, and
-                # enqueue it
-                for neighbor in edges:
-                    if neighbor not in visited or visited_depth[neighbor] > depth + 1:
-                        visited.add(neighbor)
-                        visited_depth[neighbor] = depth + 1
-                        queue.append((neighbor, depth + 1))
+                    edges = list(self.get_from_word_edges(word=word))
+                    raw_vertex_connections[word] = edges
+                else:
+                    new = False
+
+                # For each neighbor of given vertex,
+                for neighbor in raw_vertex_connections[word]:
+                    # If it is old and visited at a shallow depth, then skip
+                    if not new and visited_depth[neighbor] < depth + 1:
+                        continue
+
+                    # Otherwise,
+                    visited_depth[neighbor] = depth + 1
+                    queue.append((neighbor, depth + 1))
 
         # Encode this graph into the correct encoding
         for word in raw_vertex_connections.keys():
