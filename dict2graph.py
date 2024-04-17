@@ -147,10 +147,12 @@ class Dict2Graph:
 
 def build_dict(args):
 
-    word_dictionary = json.load(open(args.word_dictionary_path, "r"))
+    with open(args.word_dictionary_path, "r", encoding="utf-8") as f:
+        word_dictionary = json.load(f)
 
     if args.vocabulary_list_path:
-        vocabulary_list = json.load(open(args.vocabulary_list_path, "r"))
+        with open(args.vocabulary_list_path, "r", encoding="utf-8") as f:
+            vocabulary_list = json.load(f)
     else:
         vocabulary_list = None
 
@@ -167,10 +169,10 @@ def build_dict(args):
 
     os.makedirs(args.save_dir, exist_ok=True)
 
-    with open(os.path.join(args.save_dir, "encoding_dict.json"), "w") as f:
-        json.dump(output_dict["encoding_dict"], f)
-    with open(os.path.join(args.save_dir, "graph.json"), "w") as f:
-        json.dump(output_dict["graph"], f)
+    with open(os.path.join(args.save_dir, "encoding_dict.json"), "w", encoding="utf-8") as f:
+        json.dump(output_dict["encoding_dict"], f, ensure_ascii=False)
+    with open(os.path.join(args.save_dir, "graph.json"), "w", encoding="utf-8") as f:
+        json.dump(output_dict["graph"], f, ensure_ascii=False)
 
 
 if __name__ == '__main__':

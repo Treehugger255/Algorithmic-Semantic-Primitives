@@ -126,4 +126,3 @@ def get_num_vertices(json_enc_dict_path: str) -> int:
 
     enc_dict = json.load(open(json_enc_dict_path, "r"))
     return max(list(enc_dict.values()))
-
