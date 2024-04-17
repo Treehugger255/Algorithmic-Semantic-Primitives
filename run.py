@@ -41,7 +41,7 @@ def fit_ga(args):
         os.path.join(args.load_dir, "pagerank.pickle")
     )
 
-    sp_gen_lists = json.load(open(args.sp_gen_lists_path, "r"))
+    sp_gen_lists = json.load(open(args.sp_gen_lists_path, "r", encoding="utf-8"))
     sp_gen_unique_ids = get_sp_gen_unique_ids(sp_gen_lists)
 
     optim_functions = BinarySubsetSelectionOptimizationFunctions(
@@ -98,9 +98,9 @@ def fit_ga(args):
     )
 
 
-    with open(os.path.join(args.save_dir, "args.json"), "w") as f:
+    with open(os.path.join(args.save_dir, "args.json"), "w", encoding="utf-8") as f:
         json.dump(
-            vars(args), f
+            vars(args), f, ensure_ascii=False
         )
 
 if __name__ == '__main__':

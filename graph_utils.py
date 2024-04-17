@@ -111,7 +111,7 @@ def load_graph_dict(json_graph_path: str) -> Dict[int,List[int]]:
     :return: dict, converted graph dict to {vertex_id (int): [edge_vertex (int), ...]}
     """
     graph_dict = json.load(
-        open(json_graph_path, "r")
+        open(json_graph_path, "r", encoding="utf-8")
     )
     graph_dict = {int(k): v for k, v in graph_dict.items()}
     return graph_dict
@@ -124,5 +124,5 @@ def get_num_vertices(json_enc_dict_path: str) -> int:
     :return: int, num of vertices
     """
 
-    enc_dict = json.load(open(json_enc_dict_path, "r"))
+    enc_dict = json.load(open(json_enc_dict_path, "r", encoding="utf-8"))
     return max(list(enc_dict.values()))

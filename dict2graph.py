@@ -92,9 +92,14 @@ class Dict2Graph:
         all_edges = set()
 
         for def_dict in self.word_dictionary[word]:
-            processed_def = self.get_filtered_set_tokens(
-                    definition=def_dict["definition"]
-                )
+            try:
+                processed_def = self.get_filtered_set_tokens(
+                        definition=def_dict["definition"]
+                    )
+            except TypeError:
+                print(def_dict, type(def_dict))
+                raise TypeError
+
 
             if self.drop_self_cycles:
                 if word not in processed_def:
