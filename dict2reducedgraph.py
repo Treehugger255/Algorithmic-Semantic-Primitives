@@ -148,7 +148,8 @@ class Dict2Graph:
         roots = set()
         visited_depth = {} # this will serve both as a set of visited vertices and keeping track of the depth
         remaining_words = set(self.word_dictionary.keys())
-
+        pbar = tqdm(total=self.size)
+        old_size = len(visited_depth.keys())
         while len(visited_depth.keys()) < self.size:
             # Choose a new root to start DFS from
             # NOTE: Can be a word that was already explored at an earlier depth, seems reasonable to do
@@ -186,9 +187,11 @@ class Dict2Graph:
                     # Otherwise,
                     visited_depth[neighbor] = depth + 1
                     queue.append((neighbor, depth + 1))
+                pbar.update(len(visited_depth.keys()) - old_size)
+                old_size = len(visited_depth.keys())
 
         # Encode all visited vertices into graph with desired edges
-        for word in visited_depth.keys():
+        for word in tqdm(visited_depth.keys()):
             encoded_edges = []
 
             # As long as the neighbors were calculated, then add them
@@ -198,6 +201,7 @@ class Dict2Graph:
             vertex_connections[index] = encoded_edges
         return {"encoding_dict": encoding_dict, "graph": vertex_connections}
 
+        pbar.close()
 
 def build_dict(args):
     random.seed(args.seed)
@@ -227,10 +231,10 @@ def build_dict(args):
 
     os.makedirs(args.save_dir, exist_ok=True)
 
-    with open(os.path.join(args.save_dir, "\\dictionaries\\encoding_dict_" + args.stanza_lang + ".json"), "w",
+    with open(os.path.join(args.save_dir, "encoding_dict_" + args.stanza_lang + ".json"), "w",
               encoding="utf-8") as f:
         json.dump(output_dict["encoding_dict"], f, ensure_ascii=False)
-    with open(os.path.join(args.save_dir, "\\dictionaries\\reduced_dict_" + args.stanza_lang + ".json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(args.save_dir, "reduced_dict_" + args.stanza_lang + ".json"), "w", encoding="utf-8") as f:
         json.dump(output_dict["graph"], f, ensure_ascii=False)
 
 
