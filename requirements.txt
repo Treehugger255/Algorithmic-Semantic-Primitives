@@ -1,4 +1,4 @@
-autograd==1.4
+autograd==1.5
 certifi==2022.6.15
 charset-normalizer==2.1.0
 click==8.1.3
