@@ -231,10 +231,10 @@ def build_dict(args):
 
     os.makedirs(args.save_dir, exist_ok=True)
 
-    with open(os.path.join(args.save_dir, "encoding_dict_" + args.stanza_lang + ".json"), "w",
+    with open(os.path.join(args.save_dir, "encoding_dict.json"), "w",
               encoding="utf-8") as f:
         json.dump(output_dict["encoding_dict"], f, ensure_ascii=False)
-    with open(os.path.join(args.save_dir, "reduced_dict_" + args.stanza_lang + ".json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(args.save_dir, "graph.json"), "w", encoding="utf-8") as f:
         json.dump(output_dict["graph"], f, ensure_ascii=False)
 
 
