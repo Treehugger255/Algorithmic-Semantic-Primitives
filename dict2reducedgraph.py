@@ -164,7 +164,7 @@ class Dict2Graph:
                 # Dequeuing a vertex from queue
                 word, depth = queue[0]
                 queue.popleft()
-                bool new = True
+                new = True
                 # If it's already at max depth, don't add any edges or any neighbors
                 if depth >= self.depth:
                     continue
