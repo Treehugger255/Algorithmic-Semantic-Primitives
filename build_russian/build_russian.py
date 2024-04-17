@@ -8,6 +8,7 @@ russian_dict = {}
 # See the Primes one for more details
 files = ["kaikki.org-dictionary-Русский-by-pos-adj.json", "kaikki.org-dictionary-Русский-by-pos-adv.json",
              "kaikki.org-dictionary-Русский-by-pos-noun.json", "kaikki.org-dictionary-Русский-by-pos-verb.json"]
+
 for file in files:
     with open(file, encoding="utf-8") as f:
         # Each line contains a separate json record, so needs to be read individually
@@ -38,7 +39,7 @@ for file in files:
                     russian_dict[word] = gloss_list
 
 # Copied from the github, just saves the dictionary to a json in a new directory and encoded as UTF-8
-SAVE_DIR = "dictionaries/"
+SAVE_DIR = os.path.join(os.pardir, "dictionaries/")
 os.makedirs(SAVE_DIR, exist_ok=True)
 with open(os.path.join(SAVE_DIR, "russian_dictionary.json"), "w", encoding="utf8") as f:
    json.dump(russian_dict, f, ensure_ascii=False)

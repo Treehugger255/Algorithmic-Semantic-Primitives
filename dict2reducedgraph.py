@@ -200,6 +200,7 @@ class Dict2Graph:
 
 
 def build_dict(args):
+    random.seed(args.seed)
 
     with open(args.word_dictionary_path, "r", encoding="utf-8") as f:
         word_dictionary = json.load(f)
@@ -226,9 +227,10 @@ def build_dict(args):
 
     os.makedirs(args.save_dir, exist_ok=True)
 
-    with open(os.path.join(args.save_dir, "encoding_dict.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(args.save_dir, "\\dictionaries\\encoding_dict_" + args.stanza_lang + ".json"), "w",
+              encoding="utf-8") as f:
         json.dump(output_dict["encoding_dict"], f, ensure_ascii=False)
-    with open(os.path.join(args.save_dir, "graph.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(args.save_dir, "\\dictionaries\\reduced_dict_" + args.stanza_lang + ".json"), "w", encoding="utf-8") as f:
         json.dump(output_dict["graph"], f, ensure_ascii=False)
 
 
@@ -270,5 +272,10 @@ if __name__ == '__main__':
     parser.add_argument('--depth', type=int,
                         default=3,
                         help='Max depth for each randomly selected word')
+
+    parser.add_argument('--seed', type=int,
+                        default=42,
+                        help='Seed for the random choice of the reduced dictionary')
+
     args = parser.parse_args()
     build_dict(args)
