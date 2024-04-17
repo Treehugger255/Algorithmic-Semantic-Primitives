@@ -66,6 +66,9 @@ if __name__ == '__main__':
                 if neighbor not in visited:
                     stack.append(neighbor)
 
+    # Generate induced subgraph from these vertices
+    reduced_graph = {v:[x for x in graph[v] if x in visited] for v in visited}
+
     # Save resulting dictionary
-    with open("graph_reduced.json", "w", encoding="utf-8") as f:
-        json.dump(graph, f, ensure_ascii=False)
+    with open("reduced_graph.json", "w", encoding="utf-8") as f:
+        json.dump(reduced_graph, f, ensure_ascii=False)
