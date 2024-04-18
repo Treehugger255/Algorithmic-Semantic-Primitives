@@ -44,7 +44,7 @@ class DictPageRank:
 		for origin, dests in tqdm(graph.items()):
 			origin = int(origin)
 			for dest_vertex in dests:
-				if self.row2value:
+				if not self.row2value:
 					adjacency_matrix[origin][dest_vertex] = 1
 				else:
 					adjacency_matrix[self.row2value[origin]][self.row2value[dest_vertex]] = 1

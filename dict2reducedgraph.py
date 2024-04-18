@@ -140,7 +140,6 @@ class Dict2Graph:
         else:
             self.vocabulary_list = list(self.word_dictionary.keys())
 
-        encoding_dict = self.get_encoding_dict()
         vertex_connections = {}
         raw_vertex_connections = {}
 
@@ -190,6 +189,7 @@ class Dict2Graph:
                 pbar.update(len(visited_depth.keys()) - old_size)
                 old_size = len(visited_depth.keys())
 
+        encoding_dict = {k.lower():v for v,k in enumerate(list(visited_depth.keys()))}
         # Encode all visited vertices into graph with desired edges
         for word in tqdm(visited_depth.keys()):
             encoded_edges = []
