@@ -53,7 +53,7 @@ class PopulationDecoder:
         :return: None
         """
 
-        with open(filepath, "w") as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             for i, word in enumerate(words):
                 f.write(word)
                 if i < len(words) - 1:
@@ -69,7 +69,7 @@ def load_decoding_dict(enc_dict_path: str) -> Dict[int, str]:
     """
 
     encoding_dict = json.load(
-        open(enc_dict_path, "r")
+        open(enc_dict_path, "r", encoding="utf-8")
     )
 
     decoding_dict = {v:k for k,v in encoding_dict.items()}

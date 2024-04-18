@@ -24,8 +24,11 @@ class BinarySamplingFromEmpirical(Sampling):
         unused_ids = list(range(len(self.sp_gen_lists)))
 
         for k in range(n_samples):
-            set_ind = np.random.choice(unused_ids)
-            unused_ids.remove(set_ind)
+            try:
+                set_ind = np.random.choice(unused_ids)
+                unused_ids.remove(set_ind)
+            except ValueError:
+                ...
 
             I = self.sp_gen_lists[set_ind]
             X[k, I] = True

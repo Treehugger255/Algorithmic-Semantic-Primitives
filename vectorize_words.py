@@ -10,7 +10,7 @@ def read_wordlist(path: str) -> List[str]:
     :param path: str, path to file
     :return: list of words
     """
-    words = open(path, "r").read().split("\n")
+    words = open(path, "r", encoding="utf-8").read().split("\n")
     words = [w.lower() for w in words if w]
     return words
 

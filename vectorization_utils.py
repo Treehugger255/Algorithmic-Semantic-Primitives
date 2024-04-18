@@ -2,8 +2,51 @@ from transformers import BertTokenizer, BertModel
 import numpy as np
 from fasttext import load_model
 import torch
+import io
+from tqdm import tqdm
 
 from typing import List, Any, Tuple, Dict
+
+
+class MuseWordVectorizer:
+    def __init__(self, model_path: str, nmax=None) -> None:
+        vectors = []
+        word2id = {}
+        with io.open(model_path, 'r', encoding='utf-8', newline='\n', errors='ignore') as f:
+            next(f)
+            for i, line in tqdm(enumerate(f)):
+                word, vect = line.rstrip().split(' ', 1)
+                vect = np.fromstring(vect, sep=' ')
+                assert word not in word2id, 'word found twice'
+                vectors.append(vect)
+                word2id[word] = len(word2id)
+                if type(nmax) == int and len(word2id) == nmax:
+                    break
+        id2word = {v: k for k, v in word2id.items()}
+        embeddings = np.vstack(vectors)
+
+        self.embeddings = embeddings
+        self.id2word = id2word
+        self.word2id = word2id
+
+
+    def vectorize(self, words: List[str]) -> np.array:
+        """
+        Vectorize list of words into matrix
+        :param words: list of str, words to vectorize
+        :return: np.array, matrix of shape (len(words), embedding dim)
+        """
+        embedded_tokens = []
+        for word in words:
+            try:
+                embedded_tokens.append(self.embeddings[self.word2id[word]])
+            except KeyError:
+                print(f"{word} not found in embeddings")
+
+
+        embedded_tokens = np.stack(embedded_tokens)
+        return embedded_tokens
+
 
 class FastTextWordVectorizer:
     def __init__(self, model_path: str = 'cc.en.300.bin') -> None:
