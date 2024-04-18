@@ -190,6 +190,7 @@ RAE_DropSSC/
 # Created by us
 .pytest_cache/
 
+sp_russian/
 wordlists/
 GA_fit_model/
 dictionaries/

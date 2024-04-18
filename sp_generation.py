@@ -90,7 +90,6 @@ if __name__ == '__main__':
 
     parser.add_argument('--load_dir', type=str, default="graph_dir/",
                         help='path to dir where the results and graph are stored')
-    parser.add_argument('--')
     parser.add_argument('--N', type=int,
                         default=1000,
                         help='Number of experiments to run')
