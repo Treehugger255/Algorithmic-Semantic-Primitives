@@ -186,3 +186,10 @@ GA_RAE_10_08_2022/
 RAE_DropSSC/
 # idea folder, uncomment if you don't need it
 # .idea
+
+# Created by us
+.pytest_cache/
+
+wordlists/
+GA_fit_model/
+dictionaries/

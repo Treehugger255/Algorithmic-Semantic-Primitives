@@ -5,7 +5,7 @@ CONFIGS = [
         {
             "vectorizer": MuseWordVectorizer,
             "params":{
-                "model_path": "c:\\Users\\danim\\Downloads\\wiki.multi.ru.vec",
+                "model_path": "c:\\Users\\danim\\Downloads\\wiki.multi.en.vec",
             },
             "save_name": "ft",
             "output_filenames":  ["ft.npy"]
