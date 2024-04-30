@@ -12,7 +12,7 @@ def format_dictionary(dictionary: dict, lang: str, logging_level: str) -> None:
     nlp = stanza.Pipeline(lang=lang, processors="tokenize,lemma", logging_level=logging_level)
     sw = stopwords.get_stopwords(lang)
 
-    for word in tqdm(dictionary, desc="Tokenizing and lemmatizing dictionary"):
+    for word in tqdm(dictionary, desc="Tokenizing, lemmatizing, and removing stopwords from dictionary"):
         definitions = dictionary[word]
         for i in range(len(definitions)):
             defn_info = nlp(definitions[i])
