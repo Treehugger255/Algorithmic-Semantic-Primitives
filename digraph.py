@@ -25,11 +25,10 @@ def make_digraph(dictionary: dict, check_cycle=False) -> rx.PyDiGraph:
 
     :param dictionary: dictionary with each key as a words and each corresponding values as list of definitions of that word (tokenized and lemmatized).
     :type dictionary: dict
-    :param check_cycle: Checks if the addition of an edge creates a cycle during the digraph creation.
+    :param check_cycle: Checks if the addition of an edge creates a cycle during the digraph creation. If True, throws a DAGWouldCycle error whenever adding an edge would create a cycle (and does not add the edge). Cycles created otherwise.
     :type check_cycle: bool
     :rtype: rx.PyDigraph
     """
-    check_cycle = True # IMPORTANT: If set to True, throws a DAGWouldCycle error whenever adding an edge would create a cycle (and does not add the edge). Cycles created otherwise.
     digraph = rx.PyDiGraph(check_cycle=check_cycle, multigraph=False) # I think we shouldn't allow for multigraphs... I don't see why a word should point to a word in its definition more than once
 
     # Question: If a word doesn't have a definition: wouldn't it be a good idea to consider it a semantic prime?
