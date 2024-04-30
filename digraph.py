@@ -33,10 +33,10 @@ def make_digraph(dictionary: dict, check_cycle=False) -> rx.PyDiGraph:
 
     # Question: If a word doesn't have a definition: wouldn't it be a good idea to consider it a semantic prime?
 
-    # Step 1: Every entry of the dictionary is a node
+    # Step 1: Create nodes. Every entry of the dictionary is a node
     digraph.add_nodes_from(list(dictionary.keys())) 
 
-    # Step 2: Add edges between word and each word in its definitions only if the words in their definitions are already nodes (i.e. they were already in the dictionary)
+    # Step 2: Create edges. Add edges between word and each word in its definitions only if the words in their definitions are already nodes (i.e. they were already in the dictionary)
     nodes = digraph.nodes()
     for node in tqdm(nodes, desc="Creating digraph"):
         definitions = dictionary[node]
@@ -46,8 +46,8 @@ def make_digraph(dictionary: dict, check_cycle=False) -> rx.PyDiGraph:
                 if word in nodes:
                     try:
                         digraph.add_edges_from([(nodes.index(node), nodes.index(word), tuple)])
-                    except rx.DAGWouldCycle:
-                        ... # TODO: possibly add to list of possible semantic primes?
+                    except rx.DAGWouldCycle: # this is thrown only if check_cycle=True
+                        ... # TODO: Should we add to list of possible semantic primes?
     return digraph
 
 
