@@ -7,10 +7,10 @@ from collections import defaultdict
 # NOTE: Only use the words in Russian tagged as having pos adj, adv, noun, or verb, since these are considered "lexical"
 # See the Primes one for more details
 FILES = [
-    "kaikki.org-dictionary-Русский-by-pos-adj.json", 
-    "kaikki.org-dictionary-Русский-by-pos-adv.json", 
-    "kaikki.org-dictionary-Русский-by-pos-noun.json", 
-    "kaikki.org-dictionary-Русский-by-pos-verb.json"
+    "dictionaries/kaikki.org-dictionary-Русский-by-pos-adj.json", 
+    "dictionaries/kaikki.org-dictionary-Русский-by-pos-adv.json", 
+    "dictionaries/kaikki.org-dictionary-Русский-by-pos-noun.json", 
+    "dictionaries/kaikki.org-dictionary-Русский-by-pos-verb.json"
 ]
 
 def build_dict(files, kostiuk_format=False):
@@ -36,8 +36,8 @@ def build_dict(files, kostiuk_format=False):
                     # If neither, skip this entry
                     else:
                         continue
-                    gloss = sense_dict[gloss_key]
-                    assert len(gloss) == 1
+                    assert len(sense_dict[gloss_key]) == 1
+                    gloss = sense_dict[gloss_key][0]
                     if kostiuk_format:
                         gloss = {"definition" : gloss}
                     gloss_list.append(gloss)
@@ -49,7 +49,7 @@ def build_dict(files, kostiuk_format=False):
     return dic
 
 # Copied from the Kostiuk github, just saves the dictionary to a json in a new directory and encoded as UTF-8
-SAVE_DIR = os.path.join(os.pardir, "dictionaries/")
+SAVE_DIR = os.path.join(os.pardir, "test/dictionaries/")
 
 def main():
     os.makedirs(SAVE_DIR, exist_ok=True)
