@@ -37,3 +37,4 @@ tqdm==4.64.0
 transformers==4.20.1
 typing_extensions==4.3.0
 urllib3==1.26.10
+rustworkx==0.15.1

@@ -1,6 +1,13 @@
 from collections import defaultdict
-from typing import List, Dict, Union, Tuple
+#from typing import List, Dict, Union, Tuple
+import typing
 import json
+
+class WordNode:
+
+    def __init__(self, lemma: str, w: float):
+        self.lemma = lemma
+        self.w = w
 
 class DirectedGraph:
     def __init__(self, num_vertices: int) -> None:

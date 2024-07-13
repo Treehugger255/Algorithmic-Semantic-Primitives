@@ -1,9 +1,84 @@
 from graph_utils import DirectedGraph
+from graph_utils import WordNode
+import rustworkx as rx
 from typing import Dict, List, Union, Tuple
 import random, json, os
 from tqdm import tqdm
 from multiprocessing import Pool
 from graph_utils import load_graph_dict, get_num_vertices
+from scipy.special import softmax
+from scipy import stats
+from math import sqrt
+
+# Note: this is not a great algorithm for doing this, come up with a better one if possible
+def remove_appended(digraph):
+    """
+    Function that modifies digraph to contain only vertices with in_degree at least 1 and out_degree at least 1,
+    i.e. keepy only vertices that COULD, but do not necessarily lie on a directed cycle in the original digraph.
+    This should significantly reduce the size of the graph for efficiency without changing the solutions, since any
+    vertices removed should be redundant in the solution anyways
+
+    :param digraph: PyDiGraph
+    :return:
+    """
+    indices_to_check = set(digraph.node_indices())
+    while indices_to_check:
+        i = indices_to_check.pop()
+
+        # If the vertex lies on no cycle, then remove it, and check to see if this
+        if digraph.in_degree(i) == 0 or digraph.out_degree(i) == 0:
+            # Sets are not the most efficient way to do this but they reduce unnecessary redundancy so...
+            predecessors = set(digraph.predecessor_indices(i))
+            successors = set(digraph.successor_indices(i))
+            indices_to_check.update(predecessors | successors)
+
+            # Remove vertex from digraph
+            digraph.remove_node(i)
+
+def gamma(u: int, digraph):
+    """
+    Computes the function gamma(u) in digraph, which is the heuristic for adding the values.
+    NOTE: this gamma = 1 / delta from the previous papers, to support the probability and softmax + temperature later on
+    :param u: int
+    :return: float, heuristic value
+    """
+    ND = 0.0
+    for i in digraph.predecessor_indices(u):
+        ND += (digraph[i].w / sqrt(digraph.out_degree(i)))
+
+    return ND / digraph[u].w
+
+def randomized_construction(digraph, T: float):
+    """
+    Function to randomly generate a Feedback Vertex Set (FVS) of the given digraph
+    :param digraph, temperature value
+    :return:
+    """
+    X = list(digraph.node_indices())
+    F = []
+
+    # Not the cleanest but the only way I could figure to make a deep copy
+    working_digraph = digraph.subgraph(X)
+
+    # Generate desired vertices for FVS
+    while X:
+        # Get the gamma value for each vertex, then run through temperature softmax
+        base = [gamma(u, working_digraph) / T for u in X]
+        prob = softmax(base)
+
+        # Sample resulting probability distribution for next vertex to add.  Hopefully this adds diversity
+        # without needing to resort to optimizing on many different parameters
+        distribution = stats.rv_discrete(values=(X, prob))
+        v = distribution.rvs(size=1)
+
+        # Add to the partial FVS, and remove and update the remaining graph
+        F.append(v)
+        working_digraph.remove_node(v)
+        remove_appended(working_digraph)
+
+        X = working_digraph.node_indices
+
+    return F
 
 class PrimitivesCandidatesGenerator:
     """
